@@ -11,7 +11,7 @@
 
 <div style="height: 1000px;"></div>
 
-<p id="text">observe target</p>
+<p id="text" style="height: 100px; background: red">observe target</p>
 
 <div style="height: 1000px;"></div>
 
@@ -23,14 +23,17 @@ var inViewObserver = new InViewObserver();
 
 inViewObserver.add( {
 	el: text,
-	onEnter: function () { console.log( 'enter once' ); },
+	onEnterStart: function () { console.log( 'enter start once' ); },
+	onEnterEnd: function () { console.log( 'enter end once' ); },
 	once: true
 } );
 
 inViewObserver.add( {
 	el: text,
-	onEnter: function () { console.log( 'enter' ); },
-	onLeave: function () { console.log( 'leave' ); },
+	onEnterStart: function () { console.log( 'enter start' ); },
+	onEnterEnd: function () { console.log( 'enter end' ); },
+	onLeaveStart: function () { console.log( 'leave start' ); },
+	onLeaveEnd: function () { console.log( 'leave end' ); },
 	once: false
 } );
 

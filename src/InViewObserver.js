@@ -2,8 +2,7 @@ import throttle from './throttle.js';
 import isElementInViewport from './isElementInViewport.js';
 
 const onScrollListeners = [];
-
-window.addEventListener( 'scroll', () => {
+const onViewChangeHandler = () => {
 
 	for ( let i = 0, l = onScrollListeners.length; i < l; i ++ ) {
 
@@ -13,14 +12,15 @@ window.addEventListener( 'scroll', () => {
 		for ( let j = 0, m = watchTargets.length; j < m; j ++ ) {
 
 			const watchTarget = watchTargets[ j ];
-			const prevState = watchTarget.inView;
+			const prevState = watchTarget.state;
 			const inView = isElementInViewport( watchTarget.el );
-			const hasChanged = prevState !== inView;
+			const newState = inView.wholeIn ? 'WHOLE_IN': inView.partIn ? 'PART_IN': 'OUT';
+			const hasChanged = prevState !== newState;
 
-			if ( hasChanged && inView ) {
+			if ( hasChanged && newState === 'WHOLE_IN' ) {
 
-				watchTarget.inView = inView;
-				watchTarget.onEnter();
+				watchTarget.state = newState;
+				watchTarget.onEnterEnd();
 
 				if ( watchTarget.once ) {
 
@@ -32,10 +32,34 @@ window.addEventListener( 'scroll', () => {
 
 			}
 
-			if ( hasChanged && ! inView ) {
+			if (
+				hasChanged &&
+				prevState === 'OUT' &&
+				newState === 'PART_IN'
+			) {
 
-				watchTarget.inView = inView;
-				watchTarget.onLeave();
+				watchTarget.state = newState;
+				watchTarget.onEnterStart();
+				continue;
+
+			}
+
+			if (
+				hasChanged &&
+				prevState === 'PART_IN' &&
+				newState === 'OUT'
+			) {
+
+				watchTarget.state = newState;
+				watchTarget.onLeaveEnd();
+				continue;
+
+			}
+
+			if ( hasChanged && ! inView.wholeIn ) {
+
+				watchTarget.state = newState;
+				watchTarget.onLeaveStart();
 				continue;
 
 			}
@@ -50,7 +74,10 @@ window.addEventListener( 'scroll', () => {
 
 	}
 
-} )
+};
+
+window.addEventListener( 'scroll', throttle( onViewChangeHandler, 250 ) );
+window.addEventListener( 'resize', throttle( onViewChangeHandler, 250 ) );
 
 class InViewObserver {
 
@@ -65,20 +92,30 @@ class InViewObserver {
 
 		const inView = isElementInViewport( option.el );
 
-		if ( inView ) {
+		if ( inView.partIn ) {
 
-			option.onEnter();
+			option.onEnterStart();
+
+		}
+
+		if ( inView.wholeIn ) {
+
+			option.onEnterEnd();
 
 			if ( option.once ) { return; }
 
 		}
 
+		const state = inView.wholeIn ? 'WHOLE_IN': inView.partIn ? 'PART_IN': 'OUT';
+
 		this.watchTargets.push( {
 			el: option.el,
-			onEnter: option.onEnter || function () {},
-			onLeave: option.onLeave || function () {},
+			onEnterStart: option.onEnterStart || function () {},
+			onEnterEnd  : option.onEnterEnd   || function () {},
+			onLeaveStart: option.onLeaveStart || function () {},
+			onLeaveEnd  : option.onLeaveEnd   || function () {},
 			once: option.once,
-			inView
+			state: state
 		} );
 
 	}

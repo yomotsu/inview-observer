@@ -17,12 +17,22 @@ function isElementInViewport( el ) {
 
 	const rect = el.getBoundingClientRect();
 
-	return (
+	const partIn = (
+		( 0 < - rect.top && - rect.top < rect.height ) ||
+		( rect.bottom - rect.height < viewHeight && viewHeight < rect.bottom )
+	);
+
+	const wholeIn = (
 		rect.top >= 0 &&
-		rect.left >= 0 &&
-		rect.right <= viewWidth &&
+		// rect.left >= 0 &&
+		// rect.right <= viewWidth &&
 		rect.bottom <= viewHeight
 	);
+
+	return {
+		partIn,
+		wholeIn
+	};
 
 };
 

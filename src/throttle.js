@@ -1,10 +1,10 @@
 function throttle( fn, threshhold ) {
 
-	var last, deferTimer;
+	let last, deferTimer;
 
 	return function () {
 
-		var now = Date.now();
+		const now = Date.now();
 
 		if ( last && now < last + threshhold ) {
 
