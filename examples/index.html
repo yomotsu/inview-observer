@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<title>=^.^=</title>
+</head>
+<body>
+<p><a href="https://github.com/yomotsu/InViewObserver">GitHub repo</a></p>
+
+<div style="height: 1000px;"></div>
+
+<p id="text">observe target (scroll down and check to see your console)</p>
+
+<div style="height: 1000px;"></div>
+
+
+<script src="../dist/InViewObserver.js"></script>
+<script>
+
+var inViewObserver = new InViewObserver();
+
+inViewObserver.add( {
+	el: text,
+	onEnter: function () { console.log( 'enter once' ); },
+	once: true
+} );
+
+inViewObserver.add( {
+	el: text,
+	onEnter: function () { console.log( 'enter' ); },
+	onLeave: function () { console.log( 'leave' ); },
+	once: false
+} );
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,27 @@
+{
+  "name": "in-view-observer",
+  "version": "0.0.1",
+  "author": "Yomotsu",
+  "license": "MIT",
+  "main": "dist/InViewObserver.js",
+  "repository": "yomotsu/InViewObserver",
+  "jsnext:main": "dist/InViewObserver.module.js",
+  "module": "dist/InViewObserver.module.js",
+  "devDependencies": {
+    "babel-preset-env": "1.2.2",
+    "rollup": "^0.41.4",
+    "rollup-plugin-babel": "2.7.1",
+    "rollup-watch": "^3.2.2",
+    "uglify-js": "^2.6.0"
+  },
+  "scripts": {
+    "start": "npm run watch",
+    "watch": "rollup --config --watch",
+    "build": "rollup --config",
+    "release": "rollup --config && uglifyjs dist/InViewObserver.js -cm --preamble \"/*!\n * InViewObserver\n * https://github.com/yomotsu/InViewObserver\n * (c) 2017 @yomotsu\n * Released under the MIT License.\n */\" > dist/InViewObserver.min.js"
+  },
+  "engines": {
+    "node": "6.9.4",
+    "npm": "3.10.10"
+  }
+}
