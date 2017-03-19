@@ -12,7 +12,8 @@
 
 	function throttle(fn, threshhold) {
 
-		var last, deferTimer;
+		var last = void 0,
+		    deferTimer = void 0;
 
 		return function () {
 
@@ -50,14 +51,23 @@
 
 		var rect = el.getBoundingClientRect();
 
-		return rect.top >= 0 && rect.left >= 0 && rect.right <= viewWidth && rect.bottom <= viewHeight;
+		var partIn = 0 < -rect.top && -rect.top < rect.height || rect.bottom - rect.height < viewHeight && viewHeight < rect.bottom;
+
+		var wholeIn = rect.top >= 0 &&
+		// rect.left >= 0 &&
+		// rect.right <= viewWidth &&
+		rect.bottom <= viewHeight;
+
+		return {
+			partIn: partIn,
+			wholeIn: wholeIn
+		};
 	}
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 	var onScrollListeners = [];
-
-	window.addEventListener('scroll', function () {
+	var onViewChangeHandler = function onViewChangeHandler() {
 
 		for (var i = 0, l = onScrollListeners.length; i < l; i++) {
 
@@ -67,14 +77,15 @@
 			for (var j = 0, m = watchTargets.length; j < m; j++) {
 
 				var watchTarget = watchTargets[j];
-				var prevState = watchTarget.inView;
+				var prevState = watchTarget.state;
 				var inView = isElementInViewport(watchTarget.el);
-				var hasChanged = prevState !== inView;
+				var newState = inView.wholeIn ? 'WHOLE_IN' : inView.partIn ? 'PART_IN' : 'OUT';
+				var hasChanged = prevState !== newState;
 
-				if (hasChanged && inView) {
+				if (hasChanged && newState === 'WHOLE_IN') {
 
-					watchTarget.inView = inView;
-					watchTarget.onEnter();
+					watchTarget.state = newState;
+					watchTarget.onEnterEnd();
 
 					if (watchTarget.once) {
 
@@ -84,10 +95,24 @@
 					continue;
 				}
 
-				if (hasChanged && !inView) {
+				if (hasChanged && prevState === 'OUT' && newState === 'PART_IN') {
 
-					watchTarget.inView = inView;
-					watchTarget.onLeave();
+					watchTarget.state = newState;
+					watchTarget.onEnterStart();
+					continue;
+				}
+
+				if (hasChanged && prevState === 'PART_IN' && newState === 'OUT') {
+
+					watchTarget.state = newState;
+					watchTarget.onLeaveEnd();
+					continue;
+				}
+
+				if (hasChanged && !inView.wholeIn) {
+
+					watchTarget.state = newState;
+					watchTarget.onLeaveStart();
 					continue;
 				}
 			}
@@ -97,7 +122,10 @@
 				watchTargets.splice(_i, 1);
 			}
 		}
-	});
+	};
+
+	window.addEventListener('scroll', throttle(onViewChangeHandler, 250));
+	window.addEventListener('resize', throttle(onViewChangeHandler, 250));
 
 	var InViewObserver = function () {
 		function InViewObserver() {
@@ -113,21 +141,30 @@
 
 			var inView = isElementInViewport(option.el);
 
-			if (inView) {
+			if (inView.partIn) {
 
-				option.onEnter();
+				option.onEnterStart();
+			}
+
+			if (inView.wholeIn) {
+
+				option.onEnterEnd();
 
 				if (option.once) {
 					return;
 				}
 			}
 
+			var state = inView.wholeIn ? 'WHOLE_IN' : inView.partIn ? 'PART_IN' : 'OUT';
+
 			this.watchTargets.push({
 				el: option.el,
-				onEnter: option.onEnter || function () {},
-				onLeave: option.onLeave || function () {},
+				onEnterStart: option.onEnterStart || function () {},
+				onEnterEnd: option.onEnterEnd || function () {},
+				onLeaveStart: option.onLeaveStart || function () {},
+				onLeaveEnd: option.onLeaveEnd || function () {},
 				once: option.once,
-				inView: inView
+				state: state
 			});
 		};
 
