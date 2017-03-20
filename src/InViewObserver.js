@@ -68,7 +68,7 @@ const onViewChangeHandler = () => {
 
 		for ( let i = willRemoveIndices.length; i--; ) {
 
-			watchTargets.splice( i, 1 );
+			watchTargets.splice( willRemoveIndices[ i ], 1 );
 
 		}
 
@@ -76,7 +76,7 @@ const onViewChangeHandler = () => {
 
 };
 
-window.addEventListener( 'scroll', throttle( onViewChangeHandler, 250 ) );
+window.addEventListener( 'scroll', throttle( onViewChangeHandler, 100 ) );
 window.addEventListener( 'resize', throttle( onViewChangeHandler, 250 ) );
 
 class InViewObserver {
