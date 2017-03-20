@@ -113,12 +113,12 @@ var onViewChangeHandler = function onViewChangeHandler() {
 
 		for (var _i = willRemoveIndices.length; _i--;) {
 
-			watchTargets.splice(_i, 1);
+			watchTargets.splice(willRemoveIndices[_i], 1);
 		}
 	}
 };
 
-window.addEventListener('scroll', throttle(onViewChangeHandler, 250));
+window.addEventListener('scroll', throttle(onViewChangeHandler, 100));
 window.addEventListener('resize', throttle(onViewChangeHandler, 250));
 
 var InViewObserver = function () {
