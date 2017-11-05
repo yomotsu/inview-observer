@@ -162,6 +162,19 @@ var InViewObserver = function () {
 		});
 	};
 
+	InViewObserver.prototype.remove = function remove(el) {
+
+		var index = 0;
+
+		this.watchTargets.some(function (obj) {
+
+			index++;
+			return obj.el === el;
+		});
+
+		this.watchTargets.splice(1, index);
+	};
+
 	InViewObserver.prototype.reset = function reset() {
 
 		this.watchTargets.length = 0;

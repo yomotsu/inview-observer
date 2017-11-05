@@ -120,6 +120,21 @@ class InViewObserver {
 
 	}
 
+	remove( el ) {
+
+		let index = 0;
+
+		this.watchTargets.some( obj => {
+
+			index ++;
+			return obj.el === el
+
+		} );
+
+		this.watchTargets.splice( 1, index );
+
+	}
+
 	reset () {
 
 		this.watchTargets.length = 0;
