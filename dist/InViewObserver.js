@@ -186,6 +186,11 @@
 			this.watchTargets.length = 0;
 		};
 
+		InViewObserver.isInView = function isInView(el) {
+
+			return isElementInViewport(el);
+		};
+
 		return InViewObserver;
 	}();
 

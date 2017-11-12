@@ -141,6 +141,12 @@ class InViewObserver {
 
 	}
 
+	static isInView( el ) {
+
+		return isElementInViewport( el );
+
+	}
+
 }
 
 export default InViewObserver;
