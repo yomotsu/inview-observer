@@ -8,8 +8,22 @@ const license = `/*!
  */`
 
 export default {
-	entry: 'src/InViewObserver.js',
-	indent: '\t',
+	input: 'src/InViewObserver.js',
+	output: [
+		{
+			file: 'dist/InViewObserver.js',
+			format: 'umd',
+			indent: '\t',
+			name: 'InViewObserver',
+			banner: license
+		},
+		{
+			file: 'dist/InViewObserver.module.js',
+			format: 'es',
+			indent: '\t',
+			banner: license
+		}
+	],
 	sourceMap: false,
 	plugins: [
 		babel( {
@@ -27,18 +41,5 @@ export default {
 				} ]
 			]
 		} )
-	],
-	targets: [
-		{
-			format: 'umd',
-			moduleName: 'InViewObserver',
-			dest: 'dist/InViewObserver.js',
-			banner: license
-		},
-		{
-			format: 'es',
-			dest: 'dist/InViewObserver.module.js',
-			banner: license
-		}
 	]
 };
