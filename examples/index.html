@@ -11,11 +11,15 @@
 
 <div style="height: 1000px;"></div>
 
-<p id="text1" style="height: 100px; background: red">observe target A</p>
+<p id="text1" style="height: 100px; background: red">observe target 1</p>
 
 <div style="height: 1000px;"></div>
 
-<p id="text2" style="height: 100px; background: orange">observe target B</p>
+<p id="text2" style="height: 100px; background: orange">observe target 2</p>
+
+<div style="height: 1000px;"></div>
+
+<p id="text3" style="height: 100px; background: orange">observe target 3</p>
 
 <div style="height: 1000px;"></div>
 
@@ -27,28 +31,36 @@ var inViewObserver = new InViewObserver();
 
 inViewObserver.add( {
 	el: text1,
-	onEnterStart: function () { console.log( '1 enter start once' ); },
-	onEnterEnd: function () { console.log( '1 enter end once' ); },
-	once: true
-} );
-
-inViewObserver.add( {
-	el: text1,
-	onEnterStart: function () { console.log( '2 enter start' ); },
-	onEnterEnd: function () { console.log( '2 enter end' ); },
-	onLeaveStart: function () { console.log( '2 leave start' ); },
-	onLeaveEnd: function () { console.log( '2 leave end' ); },
-	once: false
+	onEnterStart: function () {
+		console.log( '1 enter start once' );
+		inViewObserver.remove( text1 );
+	},
+	onEnterEnd: function () {
+		console.log( '1 enter end once' );
+		inViewObserver.remove( text1 );
+	}
 } );
 
 inViewObserver.add( {
 	el: text2,
-	onEnterStart: function () { console.log( '3 enter start once' ); },
-	onEnterEnd: function () { console.log( '3 enter end once' ); },
-	onLeaveStart: function () { console.log( '3 leave start once' ); },
-	onLeaveEnd: function () { console.log( '3 leave end once' ); },
-	once: true
+	onEnterStart: function () { console.log( '2 enter start' ); },
+	onEnterEnd: function () { console.log( '2 enter end' ); },
+	onLeaveStart: function () { console.log( '2 leave start' ); },
+	onLeaveEnd: function () { console.log( '2 leave end' ); },
 } );
+
+inViewObserver.add( {
+	el: text3,
+	onEnterStart: function () {
+		console.log( '3 enter start once' );
+		inViewObserver.remove( text3 );
+	},
+	onEnterEnd: function () {
+		console.log( '3 enter end once' );
+		inViewObserver.remove( text3 );
+	}
+} );
+
 
 </script>
 

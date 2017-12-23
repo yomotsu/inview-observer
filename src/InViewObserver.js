@@ -14,19 +14,19 @@ const onViewChangeHandler = () => {
 			const watchTarget = watchTargets[ j ];
 			const prevState = watchTarget.state;
 			const inView = isElementInViewport( watchTarget.el );
-			const newState = inView.wholeIn ? 'WHOLE_IN': inView.partIn ? 'PART_IN': 'OUT';
+			const newState = inView.wholeIn ? 'WHOLE_IN' : inView.partIn ? 'PART_IN' : 'OUT';
 			const hasChanged = prevState !== newState;
+
+			if ( watchTarget.willRemove ) {
+
+				willRemoveIndices.push( j );
+
+			}
 
 			if ( hasChanged && newState === 'WHOLE_IN' ) {
 
 				watchTarget.state = newState;
 				watchTarget.onEnterEnd();
-
-				if ( watchTarget.once ) {
-
-					willRemoveIndices.push( j );
-
-				}
 
 				continue;
 
@@ -66,9 +66,9 @@ const onViewChangeHandler = () => {
 
 		}
 
-		for ( let i = willRemoveIndices.length; i--; ) {
+		for ( let j = willRemoveIndices.length; j--; ) {
 
-			watchTargets.splice( willRemoveIndices[ i ], 1 );
+			watchTargets.splice( willRemoveIndices[ j ], 1 );
 
 		}
 
@@ -81,32 +81,30 @@ window.addEventListener( 'resize', throttle( onViewChangeHandler, 250 ) );
 
 class InViewObserver {
 
-	constructor () {
+	constructor() {
 
 		this.watchTargets = [];
 		onScrollListeners.push( this.watchTargets );
 
 	}
 
-	add ( option = {} ) {
+	add( option = {} ) {
 
 		const inView = isElementInViewport( option.el );
 
-		if ( inView.partIn ) {
+		if ( inView.partIn && !! option.onEnterStart ) {
 
 			option.onEnterStart();
 
 		}
 
-		if ( inView.wholeIn ) {
+		if ( inView.wholeIn && !! option.onEnterEnd ) {
 
 			option.onEnterEnd();
 
-			if ( option.once ) { return; }
-
 		}
 
-		const state = inView.wholeIn ? 'WHOLE_IN': inView.partIn ? 'PART_IN': 'OUT';
+		const state = inView.wholeIn ? 'WHOLE_IN' : inView.partIn ? 'PART_IN' : 'OUT';
 
 		this.watchTargets.push( {
 			el: option.el,
@@ -114,7 +112,6 @@ class InViewObserver {
 			onEnterEnd  : option.onEnterEnd   || function () {},
 			onLeaveStart: option.onLeaveStart || function () {},
 			onLeaveEnd  : option.onLeaveEnd   || function () {},
-			once: option.once,
 			state: state
 		} );
 
@@ -122,20 +119,20 @@ class InViewObserver {
 
 	remove( el ) {
 
-		let index = 0;
-
 		this.watchTargets.some( obj => {
 
-			index ++;
-			return obj.el === el
+			if ( obj.el === el ) {
+
+				obj.willRemove = true;
+				return true;
+
+			}
 
 		} );
 
-		this.watchTargets.splice( 1, index );
-
 	}
 
-	reset () {
+	reset() {
 
 		this.watchTargets.length = 0;
 
