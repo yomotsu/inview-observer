@@ -76,15 +76,15 @@ var onViewChangeHandler = function onViewChangeHandler() {
 			var newState = inView.wholeIn ? 'WHOLE_IN' : inView.partIn ? 'PART_IN' : 'OUT';
 			var hasChanged = prevState !== newState;
 
+			if (watchTarget.willRemove) {
+
+				willRemoveIndices.push(j);
+			}
+
 			if (hasChanged && newState === 'WHOLE_IN') {
 
 				watchTarget.state = newState;
 				watchTarget.onEnterEnd();
-
-				if (watchTarget.once) {
-
-					willRemoveIndices.push(j);
-				}
 
 				continue;
 			}
@@ -111,9 +111,9 @@ var onViewChangeHandler = function onViewChangeHandler() {
 			}
 		}
 
-		for (var _i = willRemoveIndices.length; _i--;) {
+		for (var _j = willRemoveIndices.length; _j--;) {
 
-			watchTargets.splice(willRemoveIndices[_i], 1);
+			watchTargets.splice(willRemoveIndices[_j], 1);
 		}
 	}
 };
@@ -135,18 +135,14 @@ var InViewObserver = function () {
 
 		var inView = isElementInViewport(option.el);
 
-		if (inView.partIn) {
+		if (inView.partIn && !!option.onEnterStart) {
 
 			option.onEnterStart();
 		}
 
-		if (inView.wholeIn) {
+		if (inView.wholeIn && !!option.onEnterEnd) {
 
 			option.onEnterEnd();
-
-			if (option.once) {
-				return;
-			}
 		}
 
 		var state = inView.wholeIn ? 'WHOLE_IN' : inView.partIn ? 'PART_IN' : 'OUT';
@@ -157,22 +153,20 @@ var InViewObserver = function () {
 			onEnterEnd: option.onEnterEnd || function () {},
 			onLeaveStart: option.onLeaveStart || function () {},
 			onLeaveEnd: option.onLeaveEnd || function () {},
-			once: option.once,
 			state: state
 		});
 	};
 
 	InViewObserver.prototype.remove = function remove(el) {
 
-		var index = 0;
-
 		this.watchTargets.some(function (obj) {
 
-			index++;
-			return obj.el === el;
-		});
+			if (obj.el === el) {
 
-		this.watchTargets.splice(1, index);
+				obj.willRemove = true;
+				return true;
+			}
+		});
 	};
 
 	InViewObserver.prototype.reset = function reset() {
