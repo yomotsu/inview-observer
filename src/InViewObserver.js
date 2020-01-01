@@ -13,7 +13,7 @@ const onViewChangeHandler = () => {
 
 			const watchTarget = watchTargets[ j ];
 			const prevState = watchTarget.state;
-			const inView = isElementInViewport( watchTarget.el );
+			const inView = isElementInViewport( watchTarget.el, watchTarget.offsetTop, watchTarget.offsetBottom );
 			const newState = inView.wholeIn ? 'WHOLE_IN' : inView.partIn ? 'PART_IN' : 'OUT';
 			const hasChanged = prevState !== newState;
 
@@ -90,7 +90,7 @@ class InViewObserver {
 
 	add( option = {} ) {
 
-		const inView = isElementInViewport( option.el );
+		const inView = isElementInViewport( option.el, option.offsetTop, option.offsetBottom );
 
 		if ( inView.partIn && !! option.onEnterStart ) {
 
@@ -108,6 +108,8 @@ class InViewObserver {
 
 		this.watchTargets.push( {
 			el: option.el,
+			offsetTop   : option.offsetTop    || 0,
+			offsetBottom: option.offsetBottom || 0,
 			onEnterStart: option.onEnterStart || function () {},
 			onEnterEnd  : option.onEnterEnd   || function () {},
 			onLeaveStart: option.onLeaveStart || function () {},
@@ -138,9 +140,9 @@ class InViewObserver {
 
 	}
 
-	static isInView( el ) {
+	static isInView( el, offsetTop = 0, offsetBotttom = 0 ) {
 
-		return isElementInViewport( el );
+		return isElementInViewport( el, offsetTop, offsetBotttom );
 
 	}
 
