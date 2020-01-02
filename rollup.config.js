@@ -1,45 +1,31 @@
-import babel from 'rollup-plugin-babel'
+import typescript from 'rollup-plugin-typescript2';
+import pkg from './package.json';
 
 const license = `/*!
- * InViewObserver
- * https://github.com/yomotsu/InViewObserver
+ * ${ pkg.name }
+ * https://github.com/${ pkg.repository }
  * (c) 2017 @yomotsu
  * Released under the MIT License.
- */`
+ */`;
 
 export default {
-	input: 'src/InViewObserver.js',
+	input: 'src/index.ts',
 	output: [
 		{
-			file: 'dist/InViewObserver.js',
 			format: 'umd',
-			indent: '\t',
 			name: 'InViewObserver',
-			banner: license
+			file: pkg.main,
+			banner: license,
+			indent: '\t',
 		},
 		{
-			file: 'dist/InViewObserver.module.js',
 			format: 'es',
+			file: pkg.module,
+			banner: license,
 			indent: '\t',
-			banner: license
 		}
 	],
-	sourceMap: false,
 	plugins: [
-		babel( {
-			exclude: 'node_modules/**',
-			presets: [
-				[ 'env', {
-					targets: {
-						browsers: [
-							'last 2 versions',
-							'ie >= 9'
-						]
-					},
-					loose: true,
-					modules: false
-				} ]
-			]
-		} )
-	]
+		typescript( { typescript: require( 'typescript' ) } ),
+	],
 };

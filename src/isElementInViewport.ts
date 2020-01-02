@@ -1,4 +1,4 @@
-import throttle from './throttle.js';
+import { throttle } from './throttle';
 
 // let viewWidth = 0;
 let viewHeight = 0;
@@ -13,15 +13,16 @@ function onresize() {
 onresize();
 window.addEventListener( 'resize', throttle( onresize, 250 ) );
 
-function isElementInViewport( el, offsetTop = 0, offsetBotttom = 0 ) {
+export function isElementInViewport( el: HTMLElement, offsetTop = 0, offsetBottom = 0 ) {
 
 	const rect = el.getBoundingClientRect();
 	const rectTop = rect.top + offsetTop;
-	const rectBottom = rect.bottom + offsetBotttom;
+	const rectBottom = rect.bottom + offsetBottom;
+	const rectHeight = rect.height - offsetTop + offsetBottom;
 
 	const partIn = (
-		( 0 < - rectTop && - rectTop < rect.height ) ||
-		( rectBottom - rect.height < viewHeight && viewHeight < rectBottom )
+		( 0 < - rectTop && - rectTop < rectHeight ) ||
+		( rectBottom - rectHeight < viewHeight && viewHeight < rectBottom )
 	);
 
 	const wholeIn = (
@@ -36,6 +37,4 @@ function isElementInViewport( el, offsetTop = 0, offsetBotttom = 0 ) {
 		wholeIn
 	};
 
-};
-
-export default isElementInViewport;
+}
