@@ -7,6 +7,7 @@ export declare class InViewObserver {
     remove(el: HTMLElement): void;
     reset(): void;
     static isInView(el: HTMLElement, offsetTop?: number, offsetBottom?: number): {
+        hasScrollPassed: boolean;
         partIn: boolean;
         wholeIn: boolean;
     };

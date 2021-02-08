@@ -11,4 +11,6 @@ export interface WatchTargetParam {
     onEnterEnd?: Function;
     onLeaveStart?: Function;
     onLeaveEnd?: Function;
+    onScrollPassed?: Function;
+    onScrollUnPassed?: Function;
 }

@@ -48,24 +48,29 @@
 	    var rectTop = rect.top + offsetTop;
 	    var rectBottom = rect.bottom + offsetBottom;
 	    var rectHeight = rect.height - offsetTop + offsetBottom;
+	    var hasScrollPassed = rectTop <= viewHeight;
 	    var partIn = ((0 < -rectTop && -rectTop < rectHeight) ||
 	        (rectBottom - rectHeight < viewHeight && viewHeight < rectBottom));
 	    var wholeIn = (rectTop >= 0 &&
 	        rectBottom <= viewHeight);
 	    return {
+	        hasScrollPassed: hasScrollPassed,
 	        partIn: partIn,
-	        wholeIn: wholeIn
+	        wholeIn: wholeIn,
 	    };
 	}
 
 	var WatchTarget = (function () {
-	    function WatchTarget(el, offsetTop, offsetBottom, onEnterStart, onEnterEnd, onLeaveStart, onLeaveEnd) {
+	    function WatchTarget(el, offsetTop, offsetBottom, onEnterStart, onEnterEnd, onLeaveStart, onLeaveEnd, onScrollPassed, onScrollUnPassed) {
 	        if (offsetTop === void 0) { offsetTop = 0; }
 	        if (offsetBottom === void 0) { offsetBottom = 0; }
 	        if (onEnterStart === void 0) { onEnterStart = function () { }; }
 	        if (onEnterEnd === void 0) { onEnterEnd = function () { }; }
 	        if (onLeaveStart === void 0) { onLeaveStart = function () { }; }
 	        if (onLeaveEnd === void 0) { onLeaveEnd = function () { }; }
+	        if (onScrollPassed === void 0) { onScrollPassed = function () { }; }
+	        if (onScrollUnPassed === void 0) { onScrollUnPassed = function () { }; }
+	        this.hasScrollPassed = false;
 	        this.willRemove = false;
 	        var inView = isElementInViewport(el, offsetTop, offsetBottom);
 	        if (inView.partIn && !!onEnterStart)
@@ -79,6 +84,8 @@
 	        this.onEnterEnd = onEnterEnd;
 	        this.onLeaveStart = onLeaveStart;
 	        this.onLeaveEnd = onLeaveEnd;
+	        this.onScrollPassed = onScrollPassed;
+	        this.onScrollUnPassed = onScrollUnPassed;
 	        this.state = inView.wholeIn ? State.WHOLE_IN : inView.partIn ? State.PART_IN : State.OUT;
 	    }
 	    return WatchTarget;
@@ -94,9 +101,14 @@
 	            var lastState = watchTarget.state;
 	            var inView = isElementInViewport(watchTarget.el, watchTarget.offsetTop, watchTarget.offsetBottom);
 	            var newState = inView.wholeIn ? State.WHOLE_IN : inView.partIn ? State.PART_IN : State.OUT;
+	            var hasScrollPassed = inView.hasScrollPassed;
 	            var hasChanged = lastState !== newState;
 	            if (watchTarget.willRemove) {
 	                willRemoveIndices.push(j);
+	            }
+	            if (watchTarget.hasScrollPassed !== hasScrollPassed) {
+	                watchTarget.hasScrollPassed = hasScrollPassed;
+	                hasScrollPassed ? watchTarget.onScrollPassed() : watchTarget.onScrollUnPassed();
 	            }
 	            if (hasChanged && newState === State.WHOLE_IN) {
 	                watchTarget.state = newState;
@@ -136,7 +148,7 @@
 	        onScrollListeners.push(this.watchTargets);
 	    }
 	    InViewObserver.prototype.add = function (watchTargetParam) {
-	        var watchTarget = new WatchTarget(watchTargetParam.el, watchTargetParam.offsetTop, watchTargetParam.offsetBottom, watchTargetParam.onEnterStart, watchTargetParam.onEnterEnd, watchTargetParam.onLeaveStart, watchTargetParam.onLeaveEnd);
+	        var watchTarget = new WatchTarget(watchTargetParam.el, watchTargetParam.offsetTop, watchTargetParam.offsetBottom, watchTargetParam.onEnterStart, watchTargetParam.onEnterEnd, watchTargetParam.onLeaveStart, watchTargetParam.onLeaveEnd, watchTargetParam.onScrollPassed, watchTargetParam.onScrollUnPassed);
 	        this.watchTargets.push(watchTarget);
 	        return watchTarget;
 	    };
