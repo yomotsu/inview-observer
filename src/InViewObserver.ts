@@ -20,11 +20,19 @@ const onViewChangeHandler = () => {
 			const lastState = watchTarget.state;
 			const inView = isElementInViewport( watchTarget.el, watchTarget.offsetTop, watchTarget.offsetBottom );
 			const newState = inView.wholeIn ? State.WHOLE_IN : inView.partIn ? State.PART_IN : State.OUT;
+			const hasScrollPassed = inView.hasScrollPassed;
 			const hasChanged = lastState !== newState;
 
 			if ( watchTarget.willRemove ) {
 
 				willRemoveIndices.push( j );
+
+			}
+
+			if ( watchTarget.hasScrollPassed !== hasScrollPassed ) {
+
+				watchTarget.hasScrollPassed = hasScrollPassed;
+				hasScrollPassed ? watchTarget.onScrollPassed() : watchTarget.onScrollUnPassed();
 
 			}
 
@@ -104,6 +112,8 @@ export class InViewObserver {
 			watchTargetParam.onEnterEnd,
 			watchTargetParam.onLeaveStart,
 			watchTargetParam.onLeaveEnd,
+			watchTargetParam.onScrollPassed,
+			watchTargetParam.onScrollUnPassed,
 		);
 
 		this.watchTargets.push( watchTarget );

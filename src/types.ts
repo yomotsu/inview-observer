@@ -8,8 +8,10 @@ export interface WatchTargetParam {
 	el: HTMLElement;
 	offsetTop?   : number;
 	offsetBottom?: number;
-	onEnterStart?: Function;
-	onEnterEnd?  : Function;
-	onLeaveStart?: Function;
-	onLeaveEnd?  : Function;
+	onEnterStart?    : Function;
+	onEnterEnd?      : Function;
+	onLeaveStart?    : Function;
+	onLeaveEnd?      : Function;
+	onScrollPassed?  : Function;
+	onScrollUnPassed?: Function;
 }

@@ -19,6 +19,7 @@ export function isElementInViewport( el: HTMLElement, offsetTop = 0, offsetBotto
 	const rectTop = rect.top + offsetTop;
 	const rectBottom = rect.bottom + offsetBottom;
 	const rectHeight = rect.height - offsetTop + offsetBottom;
+	const hasScrollPassed = rectTop <= viewHeight;
 
 	const partIn = (
 		( 0 < - rectTop && - rectTop < rectHeight ) ||
@@ -33,8 +34,9 @@ export function isElementInViewport( el: HTMLElement, offsetTop = 0, offsetBotto
 	);
 
 	return {
+		hasScrollPassed,
 		partIn,
-		wholeIn
+		wholeIn,
 	};
 
 }
