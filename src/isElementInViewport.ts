@@ -1,4 +1,5 @@
 import { throttle } from './throttle';
+import { isBrowser } from './is-browser';
 
 // let viewWidth = 0;
 let viewHeight = 0;
@@ -10,8 +11,12 @@ function onresize() {
 
 };
 
-onresize();
-window.addEventListener( 'resize', throttle( onresize, 250 ) );
+if ( isBrowser ) {
+
+	onresize();
+	window.addEventListener( 'resize', throttle( onresize, 250 ) );
+
+}
 
 export function isElementInViewport( el: HTMLElement, offsetTop = 0, offsetBottom = 0 ) {
 

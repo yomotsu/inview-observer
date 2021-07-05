@@ -2,6 +2,7 @@ import {
 	State,
 	WatchTargetParam,
 } from './types';
+import { isBrowser } from './is-browser';
 import { WatchTarget } from './WatchTarget';
 import { throttle } from './throttle';
 import { isElementInViewport } from './isElementInViewport';
@@ -89,8 +90,12 @@ const onViewChangeHandler = () => {
 
 };
 
-window.addEventListener( 'scroll', throttle( onViewChangeHandler, 100 ) );
-window.addEventListener( 'resize', throttle( onViewChangeHandler, 250 ) );
+if ( isBrowser ) {
+
+	window.addEventListener( 'scroll', throttle( onViewChangeHandler, 100 ) );
+	window.addEventListener( 'resize', throttle( onViewChangeHandler, 250 ) );
+
+}
 
 export class InViewObserver {
 
