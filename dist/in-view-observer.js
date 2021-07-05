@@ -7,7 +7,7 @@
 (function (global, factory) {
 	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
 	typeof define === 'function' && define.amd ? define(factory) :
-	(global = global || self, global.InViewObserver = factory());
+	(global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.InViewObserver = factory());
 }(this, (function () { 'use strict';
 
 	var State;
@@ -16,6 +16,8 @@
 	    State[State["PART_IN"] = 1] = "PART_IN";
 	    State[State["OUT"] = 2] = "OUT";
 	})(State || (State = {}));
+
+	var isBrowser = typeof window !== 'undefined';
 
 	function throttle(fn, threshold) {
 	    var last, deferTimer;
@@ -39,8 +41,10 @@
 	function onresize() {
 	    viewHeight = (window.innerHeight || document.documentElement.clientHeight);
 	}
-	onresize();
-	window.addEventListener('resize', throttle(onresize, 250));
+	if (isBrowser) {
+	    onresize();
+	    window.addEventListener('resize', throttle(onresize, 250));
+	}
 	function isElementInViewport(el, offsetTop, offsetBottom) {
 	    if (offsetTop === void 0) { offsetTop = 0; }
 	    if (offsetBottom === void 0) { offsetBottom = 0; }
@@ -140,8 +144,10 @@
 	        }
 	    }
 	};
-	window.addEventListener('scroll', throttle(onViewChangeHandler, 100));
-	window.addEventListener('resize', throttle(onViewChangeHandler, 250));
+	if (isBrowser) {
+	    window.addEventListener('scroll', throttle(onViewChangeHandler, 100));
+	    window.addEventListener('resize', throttle(onViewChangeHandler, 250));
+	}
 	var InViewObserver = (function () {
 	    function InViewObserver() {
 	        this.watchTargets = [];
