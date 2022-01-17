@@ -32,6 +32,7 @@ export class WatchTarget {
 
 		if ( inView.partIn && !! onEnterStart ) onEnterStart();
 		if ( inView.wholeIn && !! onEnterEnd ) onEnterEnd();
+		inView.hasScrollPassed ? onScrollPassed() : onScrollPassed();
 
 		this.el = el;
 		this.offsetTop        = offsetTop;
