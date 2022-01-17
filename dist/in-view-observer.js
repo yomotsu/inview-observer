@@ -8,7 +8,7 @@
 	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
 	typeof define === 'function' && define.amd ? define(factory) :
 	(global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.InViewObserver = factory());
-}(this, (function () { 'use strict';
+})(this, (function () { 'use strict';
 
 	var State;
 	(function (State) {
@@ -81,6 +81,7 @@
 	            onEnterStart();
 	        if (inView.wholeIn && !!onEnterEnd)
 	            onEnterEnd();
+	        inView.hasScrollPassed ? onScrollPassed() : onScrollPassed();
 	        this.el = el;
 	        this.offsetTop = offsetTop;
 	        this.offsetBottom = offsetBottom;
@@ -180,4 +181,4 @@
 
 	return InViewObserver;
 
-})));
+}));

@@ -75,6 +75,7 @@ var WatchTarget = (function () {
             onEnterStart();
         if (inView.wholeIn && !!onEnterEnd)
             onEnterEnd();
+        inView.hasScrollPassed ? onScrollPassed() : onScrollPassed();
         this.el = el;
         this.offsetTop = offsetTop;
         this.offsetBottom = offsetBottom;
@@ -172,4 +173,4 @@ var InViewObserver = (function () {
     return InViewObserver;
 }());
 
-export default InViewObserver;
+export { InViewObserver as default };
