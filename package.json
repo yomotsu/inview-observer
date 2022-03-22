@@ -9,10 +9,10 @@
   "types": "dist/index.d.ts",
   "repository": "yomotsu/in-view-observer",
   "devDependencies": {
-    "rollup": "^2.64.0",
-    "rollup-plugin-typescript2": "^0.31.1",
-    "terser": "^5.10.0",
-    "typescript": "^4.5.4"
+    "rollup": "^2.70.1",
+    "rollup-plugin-typescript2": "^0.31.2",
+    "terser": "^5.12.1",
+    "typescript": "^4.6.2"
   },
   "scripts": {
     "dev": "rollup --config --watch",
