@@ -71,11 +71,12 @@ var WatchTarget = (function () {
         this.hasScrollPassed = false;
         this.willRemove = false;
         var inView = isElementInViewport(el, offsetTop, offsetBottom);
+        this.hasScrollPassed = inView.hasScrollPassed;
         if (inView.partIn && !!onEnterStart)
             onEnterStart();
         if (inView.wholeIn && !!onEnterEnd)
             onEnterEnd();
-        inView.hasScrollPassed ? onScrollPassed() : onScrollPassed();
+        this.hasScrollPassed ? onScrollPassed() : onScrollUnPassed();
         this.el = el;
         this.offsetTop = offsetTop;
         this.offsetBottom = offsetBottom;
