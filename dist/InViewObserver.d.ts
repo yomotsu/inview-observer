@@ -6,7 +6,7 @@ export declare class InViewObserver {
     add(watchTargetParam: WatchTargetParam): WatchTarget;
     remove(el: HTMLElement): void;
     reset(): void;
-    static isInView(el: HTMLElement, offsetTop?: number, offsetBottom?: number): {
+    static isInView(el: HTMLElement, rootMarginTop?: number, rootMarginBottom?: number): {
         hasScrollPassed: boolean;
         partIn: boolean;
         wholeIn: boolean;

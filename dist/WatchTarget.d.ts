@@ -1,16 +1,16 @@
-import { State } from './types';
+import { State, type RootMargin } from './types';
 export declare class WatchTarget {
     el: HTMLElement;
-    offsetTop: number;
-    offsetBottom: number;
-    onEnterStart: Function;
-    onEnterEnd: Function;
-    onLeaveStart: Function;
-    onLeaveEnd: Function;
-    onScrollPassed: Function;
-    onScrollUnPassed: Function;
+    rootMarginTop: RootMargin;
+    rootMarginBottom: RootMargin;
+    onEnterStart: (() => void) | undefined;
+    onEnterEnd: (() => void) | undefined;
+    onLeaveStart: (() => void) | undefined;
+    onLeaveEnd: (() => void) | undefined;
+    onScrollPassed: (() => void) | undefined;
+    onScrollUnPassed: (() => void) | undefined;
     state: State;
     hasScrollPassed: boolean;
     willRemove: boolean;
-    constructor(el: HTMLElement, offsetTop?: number | undefined, offsetBottom?: number | undefined, onEnterStart?: Function, onEnterEnd?: Function, onLeaveStart?: Function, onLeaveEnd?: Function, onScrollPassed?: Function, onScrollUnPassed?: Function);
+    constructor(el: HTMLElement, rootMarginTop?: RootMargin | undefined, rootMarginBottom?: RootMargin | undefined, onEnterStart?: () => void, onEnterEnd?: () => void, onLeaveStart?: () => void, onLeaveEnd?: () => void, onScrollPassed?: () => void, onScrollUnPassed?: () => void);
 }
