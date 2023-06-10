@@ -15,7 +15,7 @@
 
 <div style="height: 1000px;"></div>
 
-<p id="text2" style="height: 100px; background: orange">observe target 2, with offset +50, +30</p>
+<p id="text2" style="height: 100px; background: orange">observe target 2, with rootMarginTop 0, rootMarginBottom -40%</p>
 
 <div style="height: 1000px;"></div>
 
@@ -32,11 +32,11 @@ var inViewObserver = new InViewObserver();
 inViewObserver.add(
 	( {
 		el: text1,
-		onEnterStart: function () {
+		onEnterStart() {
 			console.log( '1 enter start once' );
 			inViewObserver.remove( text1 );
 		},
-		onEnterEnd: function () {
+		onEnterEnd() {
 			console.log( '1 enter end once' );
 			inViewObserver.remove( text1 );
 		}
@@ -46,25 +46,25 @@ inViewObserver.add(
 inViewObserver.add(
 	( {
 		el: text2,
-		offsetTop: 50,
-		offsetBottom: 30,
-		onEnterStart: function () { console.log( '2 enter start' ); },
-		onEnterEnd: function () { console.log( '2 enter end' ); },
-		onLeaveStart: function () { console.log( '2 leave start' ); },
-		onLeaveEnd: function () { console.log( '2 leave end' ); },
-		onScrollPassed: function () { console.log( '2 scroll passed' ); },
-		onScrollUnPassed: function () { console.log( '2 scroll un-passed' ); }
+		rootMarginTop: 0,
+		rootMarginBottom: '-40%',
+		onEnterStart() { console.log( '2 enter start' ); },
+		onEnterEnd() { console.log( '2 enter end' ); },
+		onLeaveStart() { console.log( '2 leave start' ); },
+		onLeaveEnd() { console.log( '2 leave end' ); },
+		onScrollPassed() { console.log( '2 scroll passed' ); },
+		onScrollUnPassed() { console.log( '2 scroll un-passed' ); }
 	} )
 );
 
 inViewObserver.add(
 	( {
 		el: text3,
-		onEnterStart: function () {
+		onEnterStart() {
 			console.log( '3 enter start once' );
 			inViewObserver.remove( text3 );
 		},
-		onEnterEnd: function () {
+		onEnterEnd() {
 			console.log( '3 enter end once' );
 			inViewObserver.remove( text3 );
 		}

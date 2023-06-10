@@ -19,7 +19,7 @@ const onViewChangeHandler = () => {
 
 			const watchTarget = watchTargets[ j ];
 			const lastState = watchTarget.state;
-			const inView = isElementInViewport( watchTarget.el, watchTarget.offsetTop, watchTarget.offsetBottom );
+			const inView = isElementInViewport( watchTarget.el, watchTarget.rootMarginTop, watchTarget.rootMarginBottom );
 			const newState = inView.wholeIn ? State.WHOLE_IN : inView.partIn ? State.PART_IN : State.OUT;
 			const hasScrollPassed = inView.hasScrollPassed;
 			const hasChanged = lastState !== newState;
@@ -33,14 +33,23 @@ const onViewChangeHandler = () => {
 			if ( watchTarget.hasScrollPassed !== hasScrollPassed ) {
 
 				watchTarget.hasScrollPassed = hasScrollPassed;
-				hasScrollPassed ? watchTarget.onScrollPassed() : watchTarget.onScrollUnPassed();
+
+				if ( hasScrollPassed ) {
+
+					watchTarget.onScrollPassed && watchTarget.onScrollPassed();
+
+				} else {
+
+					watchTarget.onScrollUnPassed && watchTarget.onScrollUnPassed();
+
+				}
 
 			}
 
 			if ( hasChanged && newState === State.WHOLE_IN ) {
 
 				watchTarget.state = newState;
-				watchTarget.onEnterEnd();
+				watchTarget.onEnterEnd && watchTarget.onEnterEnd();
 
 				continue;
 
@@ -53,7 +62,7 @@ const onViewChangeHandler = () => {
 			) {
 
 				watchTarget.state = newState;
-				watchTarget.onEnterStart();
+				watchTarget.onEnterStart && watchTarget.onEnterStart();
 				continue;
 
 			}
@@ -65,7 +74,7 @@ const onViewChangeHandler = () => {
 			) {
 
 				watchTarget.state = newState;
-				watchTarget.onLeaveEnd();
+				watchTarget.onLeaveEnd && watchTarget.onLeaveEnd();
 				continue;
 
 			}
@@ -73,7 +82,7 @@ const onViewChangeHandler = () => {
 			if ( hasChanged && ! inView.wholeIn ) {
 
 				watchTarget.state = newState;
-				watchTarget.onLeaveStart();
+				watchTarget.onLeaveStart && watchTarget.onLeaveStart();
 				continue;
 
 			}
@@ -111,8 +120,8 @@ export class InViewObserver {
 
 		const watchTarget = new WatchTarget(
 			watchTargetParam.el,
-			watchTargetParam.offsetTop,
-			watchTargetParam.offsetBottom,
+			watchTargetParam.rootMarginTop,
+			watchTargetParam.rootMarginBottom,
 			watchTargetParam.onEnterStart,
 			watchTargetParam.onEnterEnd,
 			watchTargetParam.onLeaveStart,
@@ -149,9 +158,9 @@ export class InViewObserver {
 
 	}
 
-	static isInView( el: HTMLElement, offsetTop = 0, offsetBottom = 0 ) {
+	static isInView( el: HTMLElement, rootMarginTop = 0, rootMarginBottom = 0 ) {
 
-		return isElementInViewport( el, offsetTop, offsetBottom );
+		return isElementInViewport( el, rootMarginTop, rootMarginBottom );
 
 	}
 

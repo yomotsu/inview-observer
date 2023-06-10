@@ -1,3 +1,4 @@
+import { type RootMargin } from './types';
 import { throttle } from './throttle';
 import { isBrowser } from './is-browser';
 
@@ -18,24 +19,36 @@ if ( isBrowser ) {
 
 }
 
-export function isElementInViewport( el: HTMLElement, offsetTop = 0, offsetBottom = 0 ) {
+export function isElementInViewport( el: HTMLElement, rootMarginTop: RootMargin = 0, rootMarginBottom: RootMargin = 0 ) {
 
+	const _rootMarginTop = isNumber( rootMarginTop ) ? rootMarginTop :
+		/^-?[0-9]+px$/.test( rootMarginTop.trim() ) ? parseInt( rootMarginTop, 10 ) :
+		/^-?[0-9]+%$/.test( rootMarginTop.trim() ) ? viewHeight * ( parseInt( rootMarginTop, 10 ) / 100 ) :
+		0;
+
+	const _rootMarginBottom = isNumber( rootMarginBottom ) ? rootMarginBottom :
+		/^-?[0-9]+px$/.test( rootMarginBottom.trim() ) ? parseInt( rootMarginBottom, 10 ) :
+		/^-?[0-9]+%$/.test( rootMarginBottom.trim() ) ? viewHeight * ( parseInt( rootMarginBottom, 10 ) / 100 ) :
+		0;
+
+	const rootTop = _rootMarginTop;
+	const rootBottom = viewHeight + _rootMarginBottom;
 	const rect = el.getBoundingClientRect();
-	const rectTop = rect.top + offsetTop;
-	const rectBottom = rect.bottom + offsetBottom;
-	const rectHeight = rect.height - offsetTop + offsetBottom;
-	const hasScrollPassed = rectTop <= viewHeight;
+	const rectTop = rect.top;
+	const rectBottom = rect.bottom;
+	const rectHeight = rect.height;
+	const hasScrollPassed = rectTop <= rootBottom;
 
 	const partIn = (
-		( 0 < - rectTop && - rectTop < rectHeight ) ||
-		( rectBottom - rectHeight < viewHeight && viewHeight < rectBottom )
+		( rootTop < - rectTop && rootTop - rectTop < rectHeight ) ||
+		( rectBottom - rectHeight < rootBottom && rootBottom < rectBottom )
 	);
 
 	const wholeIn = (
-		rectTop >= 0 &&
-		// rect.left >= 0 &&
-		// rect.right <= viewWidth &&
-		rectBottom <= viewHeight
+		rectTop >= rootTop &&
+		// rect.left >= rootLeft &&
+		// rect.right <= rootWidth &&
+		rectBottom <= rootBottom
 	);
 
 	return {
@@ -45,3 +58,10 @@ export function isElementInViewport( el: HTMLElement, offsetTop = 0, offsetBotto
 	};
 
 }
+
+
+function isNumber( value: any ): value is number {
+
+	return ( ( typeof value === 'number' ) && ( isFinite( value ) ) );
+
+};
