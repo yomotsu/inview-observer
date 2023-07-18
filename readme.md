@@ -5,4 +5,4 @@
 
 ## demos
 
-- [basic](https://yomotsu.github.io/in-view-observer/examples/index.html)
+- [basic](https://yomotsu.github.io/inview-observer/examples/index.html)
