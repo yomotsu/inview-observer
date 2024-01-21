@@ -102,7 +102,7 @@ class WatchTarget {
 }
 
 const onScrollListeners = [];
-const onViewChangeHandler = () => {
+const handleViewChange = () => {
     for (let i = 0, l = onScrollListeners.length; i < l; i++) {
         const watchTargets = onScrollListeners[i];
         const willRemoveIndices = [];
@@ -156,8 +156,8 @@ const onViewChangeHandler = () => {
     }
 };
 if (isBrowser) {
-    window.addEventListener('scroll', throttle(onViewChangeHandler, 100));
-    window.addEventListener('resize', throttle(onViewChangeHandler, 250));
+    window.addEventListener('scroll', throttle(handleViewChange, 100));
+    window.addEventListener('resize', throttle(handleViewChange, 250));
 }
 class InViewObserver {
     constructor() {
@@ -186,4 +186,4 @@ class InViewObserver {
     }
 }
 
-export { InViewObserver as default };
+export { InViewObserver as default, handleViewChange };

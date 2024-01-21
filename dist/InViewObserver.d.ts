@@ -1,5 +1,6 @@
 import { WatchTargetParam } from './types';
 import { WatchTarget } from './WatchTarget';
+export declare const handleViewChange: () => void;
 export declare class InViewObserver {
     watchTargets: WatchTarget[];
     constructor();

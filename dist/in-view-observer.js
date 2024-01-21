@@ -5,10 +5,10 @@
  * Released under the MIT License.
  */
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
-	typeof define === 'function' && define.amd ? define(factory) :
-	(global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.InViewObserver = factory());
-})(this, (function () { 'use strict';
+	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
+	typeof define === 'function' && define.amd ? define(['exports'], factory) :
+	(global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.InViewObserver = {}));
+})(this, (function (exports) { 'use strict';
 
 	const State = {
 	    WHOLE_IN: 0,
@@ -108,7 +108,7 @@
 	}
 
 	const onScrollListeners = [];
-	const onViewChangeHandler = () => {
+	const handleViewChange = () => {
 	    for (let i = 0, l = onScrollListeners.length; i < l; i++) {
 	        const watchTargets = onScrollListeners[i];
 	        const willRemoveIndices = [];
@@ -162,8 +162,8 @@
 	    }
 	};
 	if (isBrowser) {
-	    window.addEventListener('scroll', throttle(onViewChangeHandler, 100));
-	    window.addEventListener('resize', throttle(onViewChangeHandler, 250));
+	    window.addEventListener('scroll', throttle(handleViewChange, 100));
+	    window.addEventListener('resize', throttle(handleViewChange, 250));
 	}
 	class InViewObserver {
 	    constructor() {
@@ -192,6 +192,9 @@
 	    }
 	}
 
-	return InViewObserver;
+	exports.default = InViewObserver;
+	exports.handleViewChange = handleViewChange;
+
+	Object.defineProperty(exports, '__esModule', { value: true });
 
 }));
