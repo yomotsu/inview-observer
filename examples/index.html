@@ -27,49 +27,43 @@
 <script src="../dist/in-view-observer.js"></script>
 <script>
 
-var inViewObserver = new InViewObserver();
+const inViewObserver = new InViewObserver.default();
 
-inViewObserver.add(
-	( {
-		el: text1,
-		onEnterStart() {
-			console.log( '1 enter start once' );
-			inViewObserver.remove( text1 );
-		},
-		onEnterEnd() {
-			console.log( '1 enter end once' );
-			inViewObserver.remove( text1 );
-		}
-	} )
-);
+inViewObserver.add( {
+	el: text1,
+	onEnterStart() {
+		console.log( '1 enter start once' );
+		inViewObserver.remove( text1 );
+	},
+	onEnterEnd() {
+		console.log( '1 enter end once' );
+		inViewObserver.remove( text1 );
+	}
+} );
 
-inViewObserver.add(
-	( {
-		el: text2,
-		rootMarginTop: 0,
-		rootMarginBottom: '-40%',
-		onEnterStart() { console.log( '2 enter start' ); },
-		onEnterEnd() { console.log( '2 enter end' ); },
-		onLeaveStart() { console.log( '2 leave start' ); },
-		onLeaveEnd() { console.log( '2 leave end' ); },
-		onScrollPassed() { console.log( '2 scroll passed' ); },
-		onScrollUnPassed() { console.log( '2 scroll un-passed' ); }
-	} )
-);
+inViewObserver.add( {
+	el: text2,
+	rootMarginTop: 0,
+	rootMarginBottom: '-40%',
+	onEnterStart() { console.log( '2 enter start' ); },
+	onEnterEnd() { console.log( '2 enter end' ); },
+	onLeaveStart() { console.log( '2 leave start' ); },
+	onLeaveEnd() { console.log( '2 leave end' ); },
+	onScrollPassed() { console.log( '2 scroll passed' ); },
+	onScrollUnPassed() { console.log( '2 scroll un-passed' ); }
+} );
 
-inViewObserver.add(
-	( {
-		el: text3,
-		onEnterStart() {
-			console.log( '3 enter start once' );
-			inViewObserver.remove( text3 );
-		},
-		onEnterEnd() {
-			console.log( '3 enter end once' );
-			inViewObserver.remove( text3 );
-		}
-	} )
-);
+inViewObserver.add( {
+	el: text3,
+	onEnterStart() {
+		console.log( '3 enter start once' );
+		inViewObserver.remove( text3 );
+	},
+	onEnterEnd() {
+		console.log( '3 enter end once' );
+		inViewObserver.remove( text3 );
+	}
+} );
 
 
 </script>

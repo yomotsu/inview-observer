@@ -103,18 +103,17 @@ class WatchTarget {
 
 const onScrollListeners = [];
 const handleViewChange = () => {
-    for (let i = 0, l = onScrollListeners.length; i < l; i++) {
-        const watchTargets = onScrollListeners[i];
+    for (const watchTargets of onScrollListeners) {
         const willRemoveIndices = [];
-        for (let j = 0, m = watchTargets.length; j < m; j++) {
-            const watchTarget = watchTargets[j];
+        for (let i = 0, m = watchTargets.length; i < m; i++) {
+            const watchTarget = watchTargets[i];
             const lastState = watchTarget.state;
             const inView = isElementInViewport(watchTarget.el, watchTarget.rootMarginTop, watchTarget.rootMarginBottom);
             const newState = inView.wholeIn ? State.WHOLE_IN : inView.partIn ? State.PART_IN : State.OUT;
             const hasScrollPassed = inView.hasScrollPassed;
             const hasChanged = lastState !== newState;
             if (watchTarget.willRemove) {
-                willRemoveIndices.push(j);
+                willRemoveIndices.push(i);
             }
             if (watchTarget.hasScrollPassed !== hasScrollPassed) {
                 watchTarget.hasScrollPassed = hasScrollPassed;

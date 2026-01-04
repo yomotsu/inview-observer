@@ -12,14 +12,14 @@
   ],
   "repository": "yomotsu/in-view-observer",
   "devDependencies": {
-    "@rollup/plugin-typescript": "^11.1.2",
-    "@typescript-eslint/eslint-plugin": "^6.1.0",
-    "@typescript-eslint/parser": "^6.1.0",
-    "eslint": "^8.45.0",
+    "@rollup/plugin-typescript": "^12.3.0",
+    "@typescript-eslint/eslint-plugin": "^8.51.0",
+    "@typescript-eslint/parser": "^8.51.0",
+    "eslint": "^9.39.2",
     "eslint-config-mdcs": "^5.0.0",
-    "rollup": "^3.26.3",
-    "terser": "^5.19.1",
-    "typescript": "^5.1.6"
+    "rollup": "^4.54.0",
+    "terser": "^5.44.1",
+    "typescript": "^5.9.3"
   },
   "scripts": {
     "dev": "rollup --config --watch",

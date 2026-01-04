@@ -10,7 +10,7 @@ function onresize() {
 	// viewWidth = ( window.innerWidth || document.documentElement.clientWidth );
 	viewHeight = ( window.innerHeight || document.documentElement.clientHeight );
 
-};
+}
 
 if ( isBrowser ) {
 
@@ -64,4 +64,4 @@ function isNumber( value: any ): value is number {
 
 	return ( ( typeof value === 'number' ) && ( isFinite( value ) ) );
 
-};
+}

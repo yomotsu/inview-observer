@@ -10,14 +10,13 @@ import { isElementInViewport } from './isElementInViewport';
 const onScrollListeners: WatchTarget[][] = [];
 export const handleViewChange = () => {
 
-	for ( let i = 0, l = onScrollListeners.length; i < l; i ++ ) {
+	for ( const watchTargets of onScrollListeners ) {
 
-		const watchTargets = onScrollListeners[ i ];
 		const willRemoveIndices = [];
 
-		for ( let j = 0, m = watchTargets.length; j < m; j ++ ) {
+		for ( let i = 0, m = watchTargets.length; i < m; i ++ ) {
 
-			const watchTarget = watchTargets[ j ];
+			const watchTarget = watchTargets[ i ];
 			const lastState = watchTarget.state;
 			const inView = isElementInViewport( watchTarget.el, watchTarget.rootMarginTop, watchTarget.rootMarginBottom );
 			const newState = inView.wholeIn ? State.WHOLE_IN : inView.partIn ? State.PART_IN : State.OUT;
@@ -26,7 +25,7 @@ export const handleViewChange = () => {
 
 			if ( watchTarget.willRemove ) {
 
-				willRemoveIndices.push( j );
+				willRemoveIndices.push( i );
 
 			}
 
